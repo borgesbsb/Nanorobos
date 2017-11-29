@@ -265,7 +265,7 @@ int Kruskal::findSet(int vertice) {
 
     if (this->subconjunto[vertice].getParent() != vertice ) {
 
-        this->subconjunto->setParent( this->findSet( this->subconjunto[vertice].getParent() )  );
+        this->subconjunto[vertice].setParent( this->findSet( this->subconjunto[vertice].getParent() )  );
     }
     return this->subconjunto[vertice].getParent();
 }
@@ -276,15 +276,14 @@ void Kruskal::link(int vertice1, int vertice2 ) {
 
     if (this->subconjunto[vertice1].getRank() < this->subconjunto[vertice2].getRank()) {
         this->subconjunto[vertice1].setParent(vertice2);
-    }else {
-        if (this->subconjunto[vertice1].getRank() >  this->subconjunto[vertice2].getRank()) {
+    }else if (this->subconjunto[vertice1].getRank() >  this->subconjunto[vertice2].getRank())
             this->subconjunto[vertice2].setParent(vertice1);
-        }else {
-            this->subconjunto[vertice2].setParent(vertice1);
-            this->subconjunto[vertice1].setRank( this->subconjunto[vertice1].getRank()+1);
-        }
-    }
+     else {
+        this->subconjunto[vertice2].setParent(vertice1);
+        this->subconjunto[vertice1].setRank( this->subconjunto[vertice1].getRank() + 1 );
+     }
 }
+
 
 void Kruskal::uniondisjunt(int vertice1 , int vertice2) {
     this->link( this->findSet(vertice1), this->findSet(vertice2));
@@ -302,7 +301,7 @@ Aresta* Kruskal::mst() {
     Heap heap(this->grafo->getAresta(),this->grafo->getTamanho());
     heap.heapSort();
 
-    for (int i = 0; i < grafo->getOrdem(); i++) {
+    for (int i = 0; i < grafo->getTamanho(); i++) {
 
         int u = findSet(grafo->getAresta()[i].getSrc());
         int v = findSet(grafo->getAresta()[i].getDst());
@@ -315,7 +314,7 @@ Aresta* Kruskal::mst() {
 
     }
 
-    for (int i = 0; i<inc-1;i++) {
+    for (int i = 0; i<inc;i++) {
         cout << resultado[i].getSrc() <<" ---- "<<resultado[i].getDst() << " = "  << resultado[i].getPeso() << endl ;
     }
 
@@ -330,32 +329,33 @@ int main() {
     int ordem = 9;
     int tamanho = 14;
 
-    Vertice<int> *vertice1 = new Vertice<int>(0);
-    Vertice<int> *vertice2 = new Vertice<int>(1);
-    Vertice<int> *vertice3 = new Vertice<int>(2);
-    Vertice<int> *vertice4 = new Vertice<int>(3);
-    Vertice<int> *vertice5 = new Vertice<int>(4);
-    Vertice<int> *vertice6 = new Vertice<int>(5);
-    Vertice<int> *vertice7 = new Vertice<int>(6);
-    Vertice<int> *vertice8 = new Vertice<int>(7);
-    Vertice<int> *vertice9 = new Vertice<int>(8);
+    Vertice<int> *vertice0 = new Vertice<int>(0);
+    Vertice<int> *vertice1 = new Vertice<int>(1);
+    Vertice<int> *vertice2 = new Vertice<int>(2);
+    Vertice<int> *vertice3 = new Vertice<int>(3);
+    Vertice<int> *vertice4 = new Vertice<int>(4);
+    Vertice<int> *vertice5 = new Vertice<int>(5);
+    Vertice<int> *vertice6 = new Vertice<int>(6);
+    Vertice<int> *vertice7 = new Vertice<int>(7);
+    Vertice<int> *vertice8 = new Vertice<int>(8);
 
     Grafo *grafo = new Grafo(ordem,tamanho);
 
-    grafo->insertEdge(vertice1,vertice2,4);
-    grafo->insertEdge(vertice1,vertice8,8);
-    grafo->insertEdge(vertice2,vertice3,8);
-    grafo->insertEdge(vertice2,vertice8,11);
-    grafo->insertEdge(vertice3,vertice4,7);
-    grafo->insertEdge(vertice3,vertice6,4);
-    grafo->insertEdge(vertice3,vertice9,2);
-    grafo->insertEdge(vertice4,vertice5,9);
-    grafo->insertEdge(vertice4,vertice6,14);
-    grafo->insertEdge(vertice5,vertice6,10);
-    grafo->insertEdge(vertice6,vertice7,2);
-    grafo->insertEdge(vertice7,vertice9,6);
-    grafo->insertEdge(vertice7,vertice8,1);
-    grafo->insertEdge(vertice8,vertice9,7);
+    grafo->insertEdge(vertice7,vertice6,1);
+    grafo->insertEdge(vertice8,vertice6,2);
+    grafo->insertEdge(vertice6,vertice5,2);
+    grafo->insertEdge(vertice0,vertice1,4);
+    grafo->insertEdge(vertice2,vertice5,4);
+    grafo->insertEdge(vertice8,vertice6,6);
+    grafo->insertEdge(vertice2,vertice3,7);
+    grafo->insertEdge(vertice7,vertice8,7);
+    grafo->insertEdge(vertice0,vertice7,8);
+    grafo->insertEdge(vertice1,vertice2,8);
+    grafo->insertEdge(vertice3,vertice4,9);
+    grafo->insertEdge(vertice5,vertice4,10);
+    grafo->insertEdge(vertice1,vertice7,11);
+    grafo->insertEdge(vertice3,vertice5,14);
+
 
     Kruskal kruscal(grafo);
 
